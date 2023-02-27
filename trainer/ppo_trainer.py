@@ -425,12 +425,12 @@ class PPOTrainer(BaseTrainer):
         t = time.time()
         rewards, non_score_reward = self.compute_rewards(scores, logprobs, ref_logprobs)
         timing["time/ppo/compute_rewards"] = time.time() - t
-        print("output values before minbatch")
-        print(logprobs[0].shape)
-        print(ref_logprobs[0].shape)
-        print(values[0].shape)
-        print(rewards[0].shape)
-        print(non_score_reward[0].shape)
+        # print("output values before minbatch")
+        # print(logprobs[0].shape)
+        # print(ref_logprobs[0].shape)
+        # print(values[0].shape)
+        # print(rewards[0].shape)
+        # print(non_score_reward[0].shape)
         t = time.time()
         all_stats = []
         idxs = list(range(bs))
@@ -568,10 +568,12 @@ class PPOTrainer(BaseTrainer):
                 #print(logits[:, :-1,:].shape)
                 #print(input_ids[0][0, 1:].view((1,511)).shape)
                 #print(input_ids[0][0, 1:].view((1,511)))
-                logprobs = logprobs_from_logits(logits[:, :-1, :], input_ids[0][0, 1:].view((1,input_ids[0].shape[-1]-1)))
-                ref_logprobs = logprobs_from_logits(ref_logits[:, :-1, :], input_ids[0][0, 1:].view((1,input_ids[0].shape[-1]-1)))
+                logprobs = logprobs_from_logits(logits[:, :-1, :], input_ids[:, 1:])
+                ref_logprobs = logprobs_from_logits(ref_logits[:, :-1, :], input_ids[:, 1:])
+                # logprobs = logprobs_from_logits(logits[:, :-1, :], input_ids[0][0, 1:].view((1,input_ids[0].shape[-1]-1)))
+                # ref_logprobs = logprobs_from_logits(ref_logits[:, :-1, :], input_ids[0][0, 1:].view((1,input_ids[0].shape[-1]-1)))
 
-            response_batch = response_batch[0].view((1,response_batch[0].shape[-1]))
+            # response_batch = response_batch[0].view((1,response_batch[0].shape[-1]))
             #print(response_batch.shape)
             #print(response_batch)
             #print("v.shape")
@@ -587,9 +589,9 @@ class PPOTrainer(BaseTrainer):
 
                 if len(logprobs[j, start:end]) < 2:
                     raise ValueError("Responses are too short. Make sure they are at least 4 tokens long.")
-                #print("start and end")
-                #print(start)
-                #print(end)
+                print("start and end")
+                print(start)
+                print(end)
                 #print(v[j, start : end - 1].shape)
                 all_values.append(v[j, start : end - 1])
                 all_logprobs.append(logprobs[j, start:end])
@@ -687,12 +689,12 @@ class PPOTrainer(BaseTrainer):
         lastgaelam = 0
         advantages_reversed = []
         gen_len = rewards.shape[-1]
-        print(rewards)
-        print(rewards.shape)
-        print("gen_len")
-        print(gen_len)
-        print(values)
-        print(values.shape)
+        # print(rewards)
+        # print(rewards.shape)
+        # print("gen_len")
+        # print(gen_len)
+        # print(values)
+        # print(values.shape)
 
         for t in reversed(range(gen_len)):
             nextvalues = values[:, t + 1] if t < gen_len - 1 else 0.0
