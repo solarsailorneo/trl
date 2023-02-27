@@ -724,11 +724,11 @@ class PPOTrainer(BaseTrainer):
             vpred = vpred[:, start - 1 : end - 1]
             logprob = logprob[:, start:end]
         else:
-            model_input = model_input[0]
+            # model_input = model_input[0]
             #print(model_input[0].shape)
             #print(model_input[0])
 
-            logprob = logprobs_from_logits(logits[:, :-1, :], model_input[0][1:].view((1,model_input.shape[-1]-1)))
+            logprob = logprobs_from_logits(logits[:, :-1, :], model_input[:, 1:])
             logprob, vpred = logprob[:, -gen_len:], vpred[:, -gen_len - 1 : -1]
 
         vpredclipped = clip_by_value(vpred, values - self.config.cliprange_value, values + self.config.cliprange_value)
