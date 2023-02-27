@@ -593,7 +593,8 @@ class PPOTrainer(BaseTrainer):
                 print(start)
                 print(end)
                 #print(v[j, start : end - 1].shape)
-                all_values.append(v[j, start : end - 1])
+                # all_values.append(v[j, start : end - 1])
+                all_values.append(v[j, start + 1: end])
                 all_logprobs.append(logprobs[j, start:end])
                 all_ref_logprobs.append(ref_logprobs[j, start:end])
 
