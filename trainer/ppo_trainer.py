@@ -585,7 +585,7 @@ class PPOTrainer(BaseTrainer):
                     end = response_batch[j].shape[-1] - 1
                 else:
                     start = len(query_batch[j]) - 1
-                    end = len(query_batch[j]) + len(response_batch[j]) - 1
+                    end = len(query_batch[j]) + len(response_batch[j])
 
                 if len(logprobs[j, start:end]) < 2:
                     raise ValueError("Responses are too short. Make sure they are at least 4 tokens long.")
@@ -593,7 +593,7 @@ class PPOTrainer(BaseTrainer):
                 print(start)
                 print(end)
                 #print(v[j, start : end - 1].shape)
-                all_values.append(v[j, start : end - 1])
+                all_values.append(v[j, start : end])
                 all_logprobs.append(logprobs[j, start:end])
                 all_ref_logprobs.append(ref_logprobs[j, start:end])
 
