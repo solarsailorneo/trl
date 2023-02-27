@@ -425,12 +425,12 @@ class PPOTrainer(BaseTrainer):
         t = time.time()
         rewards, non_score_reward = self.compute_rewards(scores, logprobs, ref_logprobs)
         timing["time/ppo/compute_rewards"] = time.time() - t
-        # print("output values before minbatch")
-        # print(logprobs[0].shape)
-        # print(ref_logprobs[0].shape)
-        # print(values[0].shape)
-        # print(rewards[0].shape)
-        # print(non_score_reward[0].shape)
+        print("output values before minbatch")
+        print(logprobs[0].shape)
+        print(ref_logprobs[0].shape)
+        print(values[0].shape)
+        print(rewards[0].shape)
+        print(non_score_reward[0].shape)
         t = time.time()
         all_stats = []
         idxs = list(range(bs))
@@ -593,7 +593,7 @@ class PPOTrainer(BaseTrainer):
                 print(start)
                 print(end)
                 #print(v[j, start : end - 1].shape)
-                all_values.append(v[j, start : end])
+                all_values.append(v[j, start : end - 1])
                 all_logprobs.append(logprobs[j, start:end])
                 all_ref_logprobs.append(ref_logprobs[j, start:end])
 
